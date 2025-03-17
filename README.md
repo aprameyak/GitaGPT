@@ -1,33 +1,3 @@
 # GitaGPT
 
-GitaGPT is a project that integrates the teachings of the Bhagavad Gita with the capabilities of GPT (Generative Pre-trained Transformer) to provide insightful and spiritually enriching responses. This project aims to offer users guidance and wisdom from the Bhagavad Gita in a conversational format.
-
-## Features
-
-- Provides responses based on the teachings of the Bhagavad Gita.
-- Uses advanced natural language processing to understand and generate text.
-- Can be used for spiritual guidance, meditation, and personal growth.
-
-## Installation
-
-To install the necessary dependencies, run:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-To start the application, run:
-
-```bash
-python main.py
-```
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
+GitaGPT is an AI-powered chatbot that intelligently answers user queries using the teachings of the Bhagavad Gita. It integrates GPT-4 with a vectorized verse retrieval system, leveraging FAISS (Facebook AI Similarity Search) for efficient semantic search. The backend, built with FastAPI, processes user queries by retrieving the most relevant verses using sentence embeddings from SBERT (Sentence-BERT). These verses are then passed to GPT-4 via the OpenAI API, ensuring responses are both contextually accurate and spiritually insightful. The frontend, developed with Next.js, provides a seamless user experience, displaying AI-generated answers along with chapter-verse citations for further exploration. 
