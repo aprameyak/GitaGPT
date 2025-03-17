@@ -20,7 +20,11 @@ export default function Home() {
       const data = await response.json();
       setResults(data.matches || []);
     } catch (error) {
-      console.error(error);
+      if (error.message === "Failed to fetch") {
+        console.error("Connection error: Unable to reach the server.");
+      } else {
+        console.error(error);
+      }
       setResults([]);
     }
 

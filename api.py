@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 
-from backend.etl import load_verses
+from etl import load_verses  # Updated import statement
 
 FAISS_INDEX_FILE = "gita_faiss.index"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
@@ -14,7 +14,7 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 model = SentenceTransformer(EMBEDDING_MODEL)
 
 index = faiss.read_index(FAISS_INDEX_FILE)
-gita_data = load_verses()
+gita_data = load_verses()  # Load the verses
 
 app = FastAPI(title="Bhagavad Gita Search API", version="1.0")
 
