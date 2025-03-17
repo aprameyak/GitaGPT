@@ -77,44 +77,46 @@ export default function GitaChat() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="max-w-2xl w-full mx-auto p-6 bg-white shadow-lg rounded-lg text-center">
-        <h1 className="text-3xl font-bold mb-4">GitaGPT</h1>
-        <p className="mb-4 text-gray-600">
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'linear-gradient(to bottom right, #1e3a8a, #4c1d95)', padding: '16px' }}>
+      <div style={{ maxWidth: '640px', width: '100%', margin: 'auto', padding: '32px', background: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)', boxShadow: '0 10px 15px rgba(0, 0, 0, 0.1)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.3)', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#1e3a8a', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>GitaGPT</h1>
+        <p style={{ marginTop: '16px', fontSize: '18px', color: '#4c1d95' }}>
           Ask any question, and I will answer based on the Bhagavad Gita.
         </p>
 
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="border rounded p-2 w-full text-center"
-          placeholder="Ask a question (e.g., What is the meaning of duty?)"
-        />
-        <button
-          onClick={fetchGitaAnswer}
-          className="bg-blue-500 text-white p-2 rounded mt-4 w-full"
-        >
-          Ask GitaGPT
-        </button>
+        <div style={{ marginTop: '24px' }}>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{ border: '1px solid rgba(30, 58, 138, 0.4)', background: 'rgba(255, 255, 255, 0.8)', borderRadius: '8px', padding: '12px', width: '100%', textAlign: 'center', color: '#1e3a8a', placeholder: { color: 'rgba(30, 58, 138, 0.6)' }, outline: 'none', transition: 'all 0.3s', focus: { ring: '2px solid #6366f1' } }}
+            placeholder="Ask a question"
+          />
+          <button
+            onClick={fetchGitaAnswer}
+            style={{ background: '#6366f1', color: 'white', fontWeight: '600', padding: '12px', borderRadius: '8px', marginTop: '16px', width: '100%', transition: 'all 0.3s', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', hover: { background: '#4f46e5' } }}
+          >
+            Ask GitaGPT
+          </button>
+        </div>
 
         {loading && (
-          <div className="mt-4 flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-500"></div>
+          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '48px', height: '48px', borderTop: '4px solid #1e3a8a', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
           </div>
         )}
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {error && <p style={{ color: '#f87171', marginTop: '16px' }}>{error}</p>}
 
         {answer && (
-          <div className="mt-6 border p-4 rounded bg-gray-100 text-center">
-            <p className="font-bold text-lg">GitaGPT's Answer:</p>
-            <p className="text-gray-800 mt-2">{answer}</p>
+          <div style={{ marginTop: '32px', padding: '24px', borderRadius: '16px', background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(30, 58, 138, 0.3)', color: '#1e3a8a', textAlign: 'left', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+            <p style={{ fontSize: '20px', fontWeight: '700' }}>GitaGPT's Answer:</p>
+            <p style={{ marginTop: '16px', color: '#4c1d95' }}>{answer}</p>
 
             {citations.length > 0 && (
-              <div className="mt-4 text-sm text-gray-600">
-                <p className="font-bold">Referenced Verses:</p>
-                <ul className="list-disc list-inside">
+              <div style={{ marginTop: '24px', fontSize: '14px' }}>
+                <p style={{ fontWeight: '700', color: '#1e3a8a' }}>Referenced Verses:</p>
+                <ul style={{ listStyleType: 'disc', paddingLeft: '20px', color: '#4c1d95' }}>
                   {citations.map((citation, index) => (
                     <li key={index}>{citation}</li>
                   ))}
