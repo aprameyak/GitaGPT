@@ -1,26 +1,26 @@
-# 🔱 GitaGPT  
+# GitaGPT
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)  
-![FastAPI](https://img.shields.io/badge/Backend-FastAPI-green?logo=fastapi)  
-![Next.js](https://img.shields.io/badge/Frontend-Next.js-black?logo=next.js)  
-![OpenAI](https://img.shields.io/badge/AI-GPT--4-red?logo=openai)  
-![FAISS](https://img.shields.io/badge/Search-FAISS-yellow)  
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white&style=for-the-badge)
+![OpenAI](https://img.shields.io/badge/GPT--4-FF5F00?logo=openai&logoColor=white&style=for-the-badge)
+![FAISS](https://img.shields.io/badge/FAISS-FFD43B?style=for-the-badge)
 
-## 📌 About  
+## About
 
-**GitaGPT** is an **AI-powered chatbot** that answers user queries using the teachings of the **Bhagavad Gita** by integrating **GPT-4** with a searchable verse database. It employs an **ETL (Extract, Transform, Load) pipeline**, transforming Bhagavad Gita verses into structured JSON and storing them in a **FAISS** vectorized database for **semantic search**.  
+**GitaGPT** is an AI-powered chatbot that answers user queries using the teachings of the **Bhagavad Gita** by integrating **GPT-4** with a searchable verse database. It implements a full **ETL (Extract, Transform, Load) pipeline**, transforming verses into structured JSON and storing them in a **FAISS** vector database for semantic search and fast retrieval.
 
-## 🚀 Features  
+## Features
 
-✅ **AI-Powered Insights:** GPT-4 generates contextual responses backed by Bhagavad Gita verses.  
-✅ **Semantic Search:** SBERT embeddings allow meaning-based retrieval from FAISS.  
-✅ **ETL Pipeline:** Extracts, transforms, and loads verses into a structured database.  
-✅ **FastAPI Backend:** Exposes high-performance API endpoints for retrieving relevant verses.  
-✅ **Next.js Frontend:** User-friendly interface for inputting queries and fetching responses.  
+- **AI-Powered Insights**: GPT-4 generates contextual responses based on Bhagavad Gita teachings  
+- **Semantic Search**: SBERT embeddings enable meaning-based verse retrieval using FAISS  
+- **ETL Pipeline**: Extracts and vectorizes Bhagavad Gita verses for efficient querying  
+- **FastAPI Backend**: Serves high-performance API endpoints for semantic search  
+- **Next.js Frontend**: Provides a clean and interactive UI for user queries
 
-## 🛠️ Technology Stack  
+## Technology Stack
 
-- **Backend:** FastAPI (Python), OpenAI API, FAISS  
-- **Frontend:** Next.js, React.js, Axios  
-- **AI Models:** GPT-4, SBERT for embedding  
-- **Database:** FAISS for vector storage  
+- **Backend**: FastAPI (Python), OpenAI API, FAISS  
+- **Frontend**: Next.js, React.js, Axios  
+- **AI Models**: GPT-4 (response generation), SBERT (embedding)  
+- **Database**: FAISS for vector storage and similarity search
