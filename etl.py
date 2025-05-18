@@ -12,6 +12,10 @@ model = SentenceTransformer(EMBEDDING_MODEL)
 def load_verses():
     with open(VERSE_JSON, "r", encoding="utf-8") as file:
         verses = json.load(file)
+    required_keys = ["chapter_id", "verse_number", "text", "word_meanings"]
+    for verse in verses:
+        if not all(key in verse for key in required_keys):
+            raise ValueError(f"Invalid verse data: missing required keys in {verse}")
     return verses
 
 def create_vector_db():

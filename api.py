@@ -5,23 +5,25 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
+import os
 
-from etl import load_verses  # Updated import statement
+from etl import load_verses
 
 FAISS_INDEX_FILE = "gita_faiss.index"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 model = SentenceTransformer(EMBEDDING_MODEL)
 
-index = faiss.read_index(FAISS_INDEX_FILE)
-gita_data = load_verses()  # Load the verses
+try:
+    index = faiss.read_index(FAISS_INDEX_FILE)
+except Exception as e:
+    raise HTTPException(status_code=500, detail=f"Error loading FAISS index: {str(e)}")
+
+gita_data = load_verses()
 
 app = FastAPI(title="Bhagavad Gita Search API", version="1.0")
 
-# Add CORS middleware
-origins = [
-    "http://localhost:3000",
-]
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 
 app.add_middleware(
     CORSMiddleware,

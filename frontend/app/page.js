@@ -1,15 +1,20 @@
 "use client";
 import { useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function Home() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const sendQuery = async () => {
     if (!query.trim()) return;
-
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch("http://localhost:8000/search/", {
+      const response = await fetch(`${API_URL}/search/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, top_k: 3 }),
@@ -20,15 +25,12 @@ export default function Home() {
       const data = await response.json();
       setResults(data.matches || []);
     } catch (error) {
-      if (error.message === "Failed to fetch") {
-        console.error("Connection error: Unable to reach the server.");
-      } else {
-        console.error(error);
-      }
+      setError(error.message);
       setResults([]);
+    } finally {
+      setLoading(false);
+      setQuery("");
     }
-
-    setQuery(""); // Clear input after search
   };
 
   return (
@@ -67,6 +69,9 @@ export default function Home() {
           Search
         </button>
       </div>
+
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
         {results.length > 0 ? (
