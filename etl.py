@@ -1,10 +1,9 @@
 import json
-import faiss
-import numpy as np
 from sentence_transformers import SentenceTransformer
+import chromadb
+from chromadb.utils import embedding_functions
 
 VERSE_JSON = "verse.json"
-VECTOR_DB_FILE = "gita_faiss.index"
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 model = SentenceTransformer(EMBEDDING_MODEL)
@@ -18,30 +17,32 @@ def load_verses():
             raise ValueError(f"Invalid verse data: missing required keys in {verse}")
     return verses
 
-def create_vector_db():
-    gita_data = load_verses()
-
-    texts = [entry["text"] for entry in gita_data]
-    embeddings = model.encode(texts)
+def create_chroma_db():
+    print("🚀 Starting Bhagavad Gita Vectorization Job...")
     
-    index = faiss.IndexFlatL2(embeddings.shape[1])
-    index.add(np.array(embeddings))
-
-    faiss.write_index(index, VECTOR_DB_FILE)
-    print(f"📥 Vector database saved to {VECTOR_DB_FILE}")
-
-def search_verses(query, k=5):
-    index = faiss.read_index(VECTOR_DB_FILE)
-    query_embedding = model.encode([query])
-
-    distances, indices = index.search(np.array(query_embedding), k)
-    
+    # Load verses like original
     gita_data = load_verses()
-
-    results = [{"chapter": gita_data[i]["chapter_number"], "verse": gita_data[i]["verse_number"], "text": gita_data[i]["text"]} for i in indices[0]]
-    return results
+    
+    # Initialize Chroma
+    client = chromadb.PersistentClient(path="./chroma_db")
+    
+    # Create collection with same embedding model
+    collection = client.get_or_create_collection(
+        name="gita_verses",
+        embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
+    )
+    
+    # Add documents - keeping verse IDs sequential like FAISS
+    ids = [f"verse_{i}" for i in range(len(gita_data))]
+    texts = [verse["text"] for verse in gita_data]
+    
+    # Add to collection
+    collection.add(
+        ids=ids,
+        documents=texts
+    )
+    
+    print("🎉 Vectorization Completed Successfully!")
 
 if __name__ == "__main__":
-    print("🚀 Starting Bhagavad Gita Vectorization Job...")
-    create_vector_db()
-    print("🎉 Vectorization Completed Successfully!")
+    create_chroma_db()
