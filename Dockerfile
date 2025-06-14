@@ -19,7 +19,7 @@ COPY . .
 RUN python etl.py
 
 # Expose port
-EXPOSE 8000
+EXPOSE $PORT
 
 # Run the application
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"] 
+CMD uvicorn api:app --host 0.0.0.0 --port $PORT 
