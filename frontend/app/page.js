@@ -49,20 +49,19 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-8 shadow-2xl">
-              <span className="text-3xl">🕉️</span>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-lg mb-6 shadow-lg">
+              <span className="text-2xl font-bold text-white">G</span>
             </div>
-            <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">
-              Gita<span className="text-yellow-400">GPT</span>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+              Gita<span className="text-indigo-600">GPT</span>
             </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Discover timeless wisdom from the Bhagavad Gita. Ask any question about life, purpose, or spirituality 
               and receive relevant verses with AI-powered explanations.
             </p>
@@ -70,7 +69,7 @@ export default function Home() {
 
           {/* Search Section */}
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <div className="flex-1 relative">
                   <input
@@ -79,17 +78,14 @@ export default function Home() {
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask a question about life, dharma, or spirituality..."
-                    className="w-full px-6 py-4 text-lg bg-white/90 backdrop-blur-sm rounded-2xl border-0 focus:ring-4 focus:ring-yellow-400/50 focus:outline-none shadow-lg placeholder-gray-600"
+                    className="w-full px-6 py-4 text-lg bg-gray-50 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none shadow-sm placeholder-gray-500"
                     disabled={loading}
                   />
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <span className="text-gray-400">⏎</span>
-                  </div>
                 </div>
                 <button
                   onClick={sendQuery}
                   disabled={loading || !query.trim()}
-                  className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold rounded-2xl hover:from-yellow-500 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="px-8 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   {loading ? (
                     <div className="flex items-center gap-2">
@@ -97,19 +93,19 @@ export default function Home() {
                       Searching...
                     </div>
                   ) : (
-                    "Search Wisdom"
+                    "Search"
                   )}
                 </button>
               </div>
 
               {/* Example Queries */}
               <div className="flex flex-wrap gap-2 justify-center">
-                <span className="text-white/70 text-sm mr-2">Try asking:</span>
+                <span className="text-gray-500 text-sm mr-2">Try asking:</span>
                 {exampleQueries.map((example, index) => (
                   <button
                     key={index}
                     onClick={() => setQuery(example)}
-                    className="px-3 py-1 bg-white/20 text-white/90 text-sm rounded-full hover:bg-white/30 transition-colors duration-200"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors duration-200"
                   >
                     {example}
                   </button>
@@ -121,14 +117,16 @@ export default function Home() {
       </div>
 
       {/* Results Section */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {error && (
-          <div className="mb-8 p-6 bg-red-500/20 backdrop-blur-sm border border-red-500/30 rounded-2xl">
+          <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-xl">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">⚠️</span>
+              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">!</span>
+              </div>
               <div>
-                <h3 className="text-red-200 font-semibold">Something went wrong</h3>
-                <p className="text-red-300">{error}</p>
+                <h3 className="text-red-800 font-semibold">Something went wrong</h3>
+                <p className="text-red-600">{error}</p>
               </div>
             </div>
           </div>
@@ -136,9 +134,9 @@ export default function Home() {
 
         {loading && (
           <div className="text-center py-16">
-            <div className="inline-flex items-center gap-4 px-8 py-4 bg-white/10 backdrop-blur-lg rounded-2xl">
-              <div className="w-8 h-8 border-3 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin"></div>
-              <span className="text-white text-lg">Searching ancient wisdom...</span>
+            <div className="inline-flex items-center gap-4 px-8 py-4 bg-white rounded-xl shadow-lg border border-gray-200">
+              <div className="w-8 h-8 border-3 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+              <span className="text-gray-700 text-lg">Searching ancient wisdom...</span>
             </div>
           </div>
         )}
@@ -146,52 +144,46 @@ export default function Home() {
         {results.length > 0 && (
           <div className="space-y-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">Wisdom from the Bhagavad Gita</h2>
-              <p className="text-gray-300">Found {results.length} relevant verse{results.length > 1 ? 's' : ''} for your question</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Wisdom from the Bhagavad Gita</h2>
+              <p className="text-gray-600">Found {results.length} relevant verse{results.length > 1 ? 's' : ''} for your question</p>
             </div>
 
             {results.map((match, index) => (
               <div
                 key={index}
-                className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20 hover:bg-white/15 transition-all duration-300"
+                className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex items-start gap-6">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                       {index + 1}
                     </div>
                   </div>
                   
                   <div className="flex-1 space-y-6">
                     <div className="flex items-center gap-4">
-                      <h3 className="text-2xl font-bold text-yellow-400">
+                      <h3 className="text-2xl font-bold text-gray-900">
                         Chapter {match.chapter}, Verse {match.verse}
                       </h3>
-                      <div className="px-3 py-1 bg-yellow-400/20 text-yellow-300 text-sm rounded-full">
+                      <div className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full font-medium">
                         Relevance: {Math.round((1 - match.distance) * 100)}%
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      <div className="p-4 bg-white/5 rounded-2xl border-l-4 border-yellow-400">
-                        <h4 className="text-yellow-300 font-semibold mb-2 flex items-center gap-2">
-                          <span>📜</span> Sanskrit Verse
-                        </h4>
-                        <p className="text-gray-200 text-lg italic leading-relaxed">{match.text}</p>
+                      <div className="p-4 bg-amber-50 rounded-xl border-l-4 border-amber-400">
+                        <h4 className="text-amber-800 font-semibold mb-2">Sanskrit Verse</h4>
+                        <p className="text-gray-700 text-lg italic leading-relaxed">{match.text}</p>
                       </div>
 
-                      <div className="p-4 bg-white/5 rounded-2xl border-l-4 border-blue-400">
-                        <h4 className="text-blue-300 font-semibold mb-2 flex items-center gap-2">
-                          <span>🔤</span> Translation
-                        </h4>
-                        <p className="text-gray-200 leading-relaxed">{match.interpretation}</p>
+                      <div className="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400">
+                        <h4 className="text-blue-800 font-semibold mb-2">Translation</h4>
+                        <p className="text-gray-700 leading-relaxed">{match.interpretation}</p>
                       </div>
 
-                      <div className="p-4 bg-white/5 rounded-2xl border-l-4 border-purple-400">
-                        <h4 className="text-purple-300 font-semibold mb-2 flex items-center gap-2">
-                          <span>🤖</span> AI Explanation
-                        </h4>
-                        <p className="text-gray-200 leading-relaxed">{match.ai_explanation}</p>
+                      <div className="p-4 bg-purple-50 rounded-xl border-l-4 border-purple-400">
+                        <h4 className="text-purple-800 font-semibold mb-2">Explanation</h4>
+                        <p className="text-gray-700 leading-relaxed">{match.ai_explanation}</p>
                       </div>
                     </div>
                   </div>
@@ -203,11 +195,13 @@ export default function Home() {
 
         {!loading && !error && results.length === 0 && query && (
           <div className="text-center py-16">
-            <div className="inline-flex flex-col items-center gap-4 px-8 py-8 bg-white/10 backdrop-blur-lg rounded-2xl">
-              <span className="text-6xl">🔍</span>
+            <div className="inline-flex flex-col items-center gap-4 px-8 py-8 bg-white rounded-xl shadow-lg border border-gray-200">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                <span className="text-gray-400 text-2xl font-bold">?</span>
+              </div>
               <div>
-                <h3 className="text-white text-xl font-semibold mb-2">No results found</h3>
-                <p className="text-gray-300">Try rephrasing your question or use one of the examples above</p>
+                <h3 className="text-gray-900 text-xl font-semibold mb-2">No results found</h3>
+                <p className="text-gray-600">Try rephrasing your question or use one of the examples above</p>
               </div>
             </div>
           </div>
@@ -215,11 +209,11 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
+      <footer className="border-t border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <p className="text-gray-400">
-              Built with ❤️ using AI • Bringing ancient wisdom to the modern world
+            <p className="text-gray-500">
+              Bringing ancient wisdom to the modern world
             </p>
           </div>
         </div>
