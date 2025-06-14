@@ -5,8 +5,6 @@ services:
     runtime: python3.9
     buildCommand: |
       python -m pip install --upgrade pip setuptools wheel
-      pip install torch==1.13.1 --index-url https://download.pytorch.org/whl/cpu
-      pip install numpy==1.24.3
       pip install -r requirements.txt
       python etl.py
     startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 4 --timeout-keep-alive 75

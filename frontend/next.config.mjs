@@ -22,7 +22,7 @@ const nextConfig = {
       },
     ];
   },
-  trailingSlash: false,
+  trailingSlash: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   poweredByHeader: false,
   compress: true,
@@ -31,6 +31,9 @@ const nextConfig = {
   images: {
     domains: ['gitagpt-iyj1.onrender.com'],
   },
+  experimental: {
+    appDir: true
+  }
 };
 
 export default nextConfig;
