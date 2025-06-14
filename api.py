@@ -17,10 +17,14 @@ load_dotenv()
 # Configure Gemini
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    raise ValueError("GOOGLE_API_KEY environment variable is required")
+    print("WARNING: GOOGLE_API_KEY not found, AI explanations will be disabled")
+    api_key = None
 
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-pro')
+if api_key:
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-pro')
+else:
+    model = None
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
@@ -35,6 +39,7 @@ try:
         embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
     )
 except Exception as e:
+    print(f"Error loading Chroma DB: {str(e)}")
     raise HTTPException(status_code=500, detail=f"Error loading Chroma DB: {str(e)}")
 
 gita_data = load_verses()
@@ -56,6 +61,9 @@ class SearchRequest(BaseModel):
 
 def get_verse_explanation(query: str, verse_text: str) -> str:
     """Generate explanation for a verse using Gemini"""
+    if not model:
+        return "AI explanations are currently unavailable."
+    
     try:
         prompt = f"Question: {query}\nVerse from Bhagavad Gita: {verse_text}\nExplain this verse in context of the question:"
         response = model.generate_content(prompt)
