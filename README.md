@@ -1,41 +1,36 @@
-# GitaGPT API
+# GitaGPT
 
-A FastAPI-based search engine for the Bhagavad Gita using Gemini AI for explanations.
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white&style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss&logoColor=white&style=for-the-badge)
+![Google AI](https://img.shields.io/badge/Google%20AI-4285F4?logo=google&logoColor=white&style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=for-the-badge)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white&style=for-the-badge)
+![Render](https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=white&style=for-the-badge)
 
-## Setup
+## About
 
-1. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+**GitaGPT** is a modern, AI-powered platform built with **Next.js** and **FastAPI** that brings the timeless wisdom of the Bhagavad Gita to the digital age. Users can ask any question about life, purpose, or spirituality and receive relevant Sanskrit verses with **AI-enhanced explanations** powered by Google's Gemini AI.
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## Features
 
-3. Create a `.env` file with:
-```
-GOOGLE_API_KEY=your_api_key_here
-ALLOWED_ORIGINS=*
-```
+- Semantic search through all 700 verses of the Bhagavad Gita
+- AI-powered explanations using Google's Gemini API for contextual understanding
+- Professional, responsive UI built with Tailwind CSS
+- Vector database integration with ChromaDB for intelligent search
+- Real-time verse retrieval with relevance scoring
+- Docker containerized backend for scalable deployment
 
-4. Run the development server:
-```bash
-uvicorn api:app --reload
-```
+## Technology Stack
 
-## Deployment
+- **Frontend**: React.js (Next.js), Tailwind CSS
+- **Backend**: FastAPI, Python
+- **Database**: ChromaDB (Vector Database)
+- **AI Integration**: Google Gemini API, Sentence Transformers
+- **Deployment**: Vercel (Frontend), Render (Backend)
+- **Containerization**: Docker
 
-1. Get a free API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new Web Service on Render
-3. Connect your GitHub repository
-4. Add your `GOOGLE_API_KEY` in the environment variables
-5. Deploy!
+## Live Deployment
 
-## API Endpoints
-
-- POST `/search/`: Search for verses
-  - Body: `{"query": "your question", "top_k": 3}`
-- GET `/metadata/`: Get API information
+- **View Here**: [https://gita-gpt-two.vercel.app/](https://gita-gpt-two.vercel.app/)
