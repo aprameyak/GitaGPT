@@ -27,6 +27,13 @@ const nextConfig = {
   },
   trailingSlash: false,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  poweredByHeader: false,
+  compress: true,
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: ['gitagpt-iyj1.onrender.com'],
+  },
 };
 
 export default nextConfig;

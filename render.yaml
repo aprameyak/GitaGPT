@@ -6,10 +6,20 @@ services:
     buildCommand: |
       python -m pip install --upgrade pip setuptools wheel
       pip install -r requirements.txt
-    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 4 --timeout-keep-alive 75
     envVars:
       - key: GOOGLE_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
         value: "*"
-    healthCheckPath: /metadata/ 
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+    healthCheckPath: /metadata/
+    autoDeploy: true
+    plan: free
+    disk:
+      name: chroma-data
+      mountPath: /opt/render/project/src/chroma_db
+      sizeGB: 1 

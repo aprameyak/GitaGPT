@@ -10,4 +10,7 @@ pydantic==1.10.13
 typing-extensions==4.5.0
 torch==1.13.1
 transformers==4.26.1
+requests==2.28.2
+aiohttp==3.8.4
+starlette==0.19.1
 --find-links https://download.pytorch.org/whl/torch_stable.html 
