@@ -25,6 +25,8 @@ const nextConfig = {
       },
     ];
   },
+  trailingSlash: false,
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 };
 
 export default nextConfig;
