@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://gitagpt-api.onrender.com/:path*',
+        destination: 'https://gitagpt-iyj1.onrender.com/:path*',
       },
     ];
   },
