@@ -41,12 +41,12 @@ gita_data = load_verses()
 
 app = FastAPI(title="Bhagavad Gita Search API", version="1.0")
 
-# Add CORS middleware
+# Add CORS middleware - MUST be before routes
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -63,6 +63,10 @@ def get_verse_explanation(query: str, verse_text: str) -> str:
     except Exception as e:
         print(f"Error generating explanation: {str(e)}")
         return "Unable to generate explanation at this time."
+
+@app.options("/search/")
+async def options_search():
+    return {"message": "OK"}
 
 @app.post("/search/")
 def search_verses(request: SearchRequest):
