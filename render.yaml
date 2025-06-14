@@ -8,8 +8,4 @@ services:
         sync: false
     healthCheckPath: /health
     autoDeploy: true
-    plan: free
-    disk:
-      name: chroma-data
-      mountPath: /app/chroma_db
-      sizeGB: 1 
+    plan: free 
