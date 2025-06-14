@@ -6,17 +6,24 @@ from sentence_transformers import SentenceTransformer
 import os
 import chromadb
 from chromadb.utils import embedding_functions
-from langchain.llms import OpenAI
+import google.generativeai as genai
+from dotenv import load_dotenv
 
 from etl import load_verses
 
+# Load environment variables
+load_dotenv()
+
+# Configure Gemini
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+model = genai.GenerativeModel('gemini-pro')
+
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
-# Initialize models - keeping similar to original
-model = SentenceTransformer(EMBEDDING_MODEL)
-explanation_model = OpenAI(temperature=0.7)
+# Initialize models
+embedding_model = SentenceTransformer(EMBEDDING_MODEL)
 
-# Initialize Chroma - similar to how we loaded FAISS
+# Initialize Chroma
 try:
     client = chromadb.PersistentClient(path="./chroma_db")
     collection = client.get_collection(
@@ -44,9 +51,10 @@ class SearchRequest(BaseModel):
     top_k: int = 3
 
 def get_verse_explanation(query: str, verse_text: str) -> str:
-    """Generate explanation for a verse using LangChain OpenAI"""
+    """Generate explanation for a verse using Gemini"""
     prompt = f"Question: {query}\nVerse from Bhagavad Gita: {verse_text}\nExplain this verse in context of the question:"
-    return explanation_model.predict(prompt)
+    response = model.generate_content(prompt)
+    return response.text
 
 @app.post("/search/")
 def search_verses(request: SearchRequest):
