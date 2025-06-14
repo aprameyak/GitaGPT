@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 import os
@@ -14,7 +15,11 @@ from etl import load_verses
 load_dotenv()
 
 # Configure Gemini
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY environment variable is required")
+
+genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-pro')
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
@@ -25,7 +30,7 @@ embedding_model = SentenceTransformer(EMBEDDING_MODEL)
 # Initialize Chroma
 try:
     client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_collection(
+    collection = client.get_or_create_collection(
         name="gita_verses",
         embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
     )
@@ -36,53 +41,84 @@ gita_data = load_verses()
 
 app = FastAPI(title="Bhagavad Gita Search API", version="1.0")
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class SearchRequest(BaseModel):
     query: str
     top_k: int = 3
 
 def get_verse_explanation(query: str, verse_text: str) -> str:
     """Generate explanation for a verse using Gemini"""
-    prompt = f"Question: {query}\nVerse from Bhagavad Gita: {verse_text}\nExplain this verse in context of the question:"
-    response = model.generate_content(prompt)
-    return response.text
+    try:
+        prompt = f"Question: {query}\nVerse from Bhagavad Gita: {verse_text}\nExplain this verse in context of the question:"
+        response = model.generate_content(prompt)
+        return response.text if response.text else "Unable to generate explanation at this time."
+    except Exception as e:
+        print(f"Error generating explanation: {str(e)}")
+        return "Unable to generate explanation at this time."
 
 @app.post("/search/")
 def search_verses(request: SearchRequest):
     if not request.query:
         raise HTTPException(status_code=400, detail="Query cannot be empty")
 
-    # Search using Chroma but keep response handling similar to original
-    results = collection.query(
-        query_texts=[request.query],
-        n_results=request.top_k,
-        include=["documents", "metadatas", "distances"]
-    )
-    
-    formatted_results = []
-    for i in range(len(results["ids"][0])):
-        verse_id = int(results["ids"][0][i].replace("verse_", ""))
-        verse = gita_data[verse_id]  # Keep using gita_data like original
+    try:
+        # Search using Chroma
+        results = collection.query(
+            query_texts=[request.query],
+            n_results=request.top_k,
+            include=["documents", "metadatas", "distances"]
+        )
         
-        if all(key in verse for key in ("chapter_id", "verse_number", "text", "word_meanings")):
-            explanation = get_verse_explanation(request.query, verse["text"])
-            
-            formatted_results.append({
-                "rank": i + 1,
-                "chapter": verse["chapter_id"],
-                "verse": verse["verse_number"],
-                "text": verse["text"],
-                "interpretation": verse["word_meanings"],
-                "ai_explanation": explanation,
-                "distance": float(results["distances"][0][i])
-            })
+        if not results["ids"] or not results["ids"][0]:
+            return {"query": request.query, "matches": []}
+        
+        formatted_results = []
+        for i in range(len(results["ids"][0])):
+            verse_id = int(results["ids"][0][i].replace("verse_", ""))
+            if verse_id < len(gita_data):
+                verse = gita_data[verse_id]
+                
+                if all(key in verse for key in ("chapter_id", "verse_number", "text", "word_meanings")):
+                    explanation = get_verse_explanation(request.query, verse["text"])
+                    
+                    formatted_results.append({
+                        "rank": i + 1,
+                        "chapter": verse["chapter_id"],
+                        "verse": verse["verse_number"],
+                        "text": verse["text"],
+                        "interpretation": verse["word_meanings"],
+                        "ai_explanation": explanation,
+                        "distance": float(results["distances"][0][i])
+                    })
 
-    return {"query": request.query, "matches": formatted_results}
+        return {"query": request.query, "matches": formatted_results}
+    
+    except Exception as e:
+        print(f"Search error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error during search")
+
+@app.get("/")
+def root():
+    return {"message": "Bhagavad Gita Search API is running"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "gitagpt-api"}
 
 @app.get("/metadata/")
 def get_metadata():
     return {
         "title": app.title,
         "version": app.version,
+        "status": "running",
         "endpoints": [
             {
                 "path": "/search/",

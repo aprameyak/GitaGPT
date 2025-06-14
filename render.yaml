@@ -4,14 +4,16 @@ services:
     env: python
     runtime: python3.9
     buildCommand: |
-      python -m pip install --upgrade pip setuptools wheel
+      python -m pip install --upgrade pip==23.0.1
+      pip install setuptools==65.5.1 wheel==0.38.4
+      pip install torch==1.13.1 --index-url https://download.pytorch.org/whl/cpu
       pip install -r requirements.txt
       python etl.py
-    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 4 --timeout-keep-alive 75
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1 --timeout-keep-alive 75
     envVars:
       - key: GOOGLE_API_KEY
         sync: false
-    healthCheckPath: /metadata/
+    healthCheckPath: /health
     autoDeploy: true
     plan: free
     disk:

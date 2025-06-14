@@ -11,6 +11,4 @@ typing-extensions==4.5.0
 transformers==4.26.1
 requests==2.28.2
 aiohttp==3.8.4
-starlette==0.27.0
-torch==1.13.1
---find-links https://download.pytorch.org/whl/torch_stable.html 
+starlette==0.27.0 
