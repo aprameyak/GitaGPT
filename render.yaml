@@ -13,12 +13,6 @@ services:
     envVars:
       - key: GOOGLE_API_KEY
         sync: false
-      - key: ALLOWED_ORIGINS
-        value: "*"
-      - key: PYTHONUNBUFFERED
-        value: "1"
-      - key: PYTHONDONTWRITEBYTECODE
-        value: "1"
     healthCheckPath: /metadata/
     autoDeploy: true
     plan: free

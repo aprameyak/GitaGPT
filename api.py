@@ -1,6 +1,5 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 import os
@@ -36,15 +35,6 @@ except Exception as e:
 gita_data = load_verses()
 
 app = FastAPI(title="Bhagavad Gita Search API", version="1.0")
-
-# Allow all origins for deployment
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 class SearchRequest(BaseModel):
     query: str
