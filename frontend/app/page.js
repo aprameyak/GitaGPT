@@ -34,69 +34,46 @@ export default function Home() {
   };
 
   return (
-    <div style={{ backgroundColor: "#121212", color: "#fff", minHeight: "100vh", padding: "20px" }}>
-      <h1 style={{ textAlign: "center", fontSize: "32px", marginBottom: "20px" }}>GitaGPT</h1>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+    <main className="min-h-screen bg-[#121212] text-white p-5">
+      <h1 className="text-center text-3xl font-bold mb-5">GitaGPT</h1>
+      <div className="flex justify-center mb-5">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendQuery()}
           placeholder="Enter a keyword..."
-          style={{
-            width: "50%",
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #444",
-            backgroundColor: "#222",
-            color: "#fff",
-            marginRight: "10px",
-          }}
+          className="w-1/2 p-2.5 text-base rounded border border-[#444] bg-[#222] text-white mr-2.5"
         />
         <button
           onClick={sendQuery}
-          style={{
-            backgroundColor: "#007BFF",
-            color: "white",
-            border: "none",
-            padding: "10px 20px",
-            fontSize: "16px",
-            cursor: "pointer",
-            borderRadius: "5px",
-          }}
+          className="bg-blue-500 text-white border-none py-2.5 px-5 text-base cursor-pointer rounded hover:bg-blue-600"
         >
           Search
         </button>
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
+      {loading && <p className="text-center">Loading...</p>}
+      {error && <p className="text-red-500 text-center">Error: {error}</p>}
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+      <div className="flex flex-col items-center gap-2.5">
         {results.length > 0 ? (
           results.map((match, index) => (
             <div
               key={index}
-              style={{
-                backgroundColor: "#1e1e1e",
-                padding: "15px",
-                borderRadius: "8px",
-                width: "60%",
-                boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.1)",
-              }}
+              className="bg-[#1e1e1e] p-4 rounded-lg w-3/5 shadow-lg"
             >
-              <h3>
+              <h3 className="text-xl font-semibold mb-2">
                 Chapter {match.chapter}, Verse {match.verse}
               </h3>
-              <p><strong>Sanskrit:</strong> {match.text}</p>
+              <p className="mb-2"><strong>Sanskrit:</strong> {match.text}</p>
               <p><strong>Meaning:</strong> {match.interpretation}</p>
             </div>
           ))
         ) : (
-          <p style={{ color: "#bbb" }}>No results found</p>
+          <p className="text-[#bbb]">No results found</p>
         )}
       </div>
-    </div>
+    </main>
   );
 }
