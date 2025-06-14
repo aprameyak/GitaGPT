@@ -2,7 +2,7 @@ services:
   - type: web
     name: gitagpt-api
     env: python
-    runtime: python3.9
+    runtime: python3.9.18
     buildCommand: |
       python -m pip install --upgrade pip==23.0.1
       pip install setuptools==65.5.1 wheel==0.38.4
