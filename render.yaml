@@ -8,4 +8,13 @@ services:
       - key: GOOGLE_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
-        value: "*" 
+        value: "*"
+
+  - type: web
+    name: gitagpt-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://gitagpt-api.onrender.com 
