@@ -31,9 +31,6 @@ const nextConfig = {
   images: {
     domains: ['gitagpt-iyj1.onrender.com'],
   },
-  experimental: {
-    appDir: true
-  }
 };
 
 export default nextConfig;
