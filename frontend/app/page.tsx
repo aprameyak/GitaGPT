@@ -1,15 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://gitagpt-api.onrender.com";
 
-export default function Home() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+interface SearchMatch {
+  chapter: number;
+  verse: number;
+  distance: number;
+  text: string;
+  interpretation: string;
+  ai_explanation: string;
+}
 
-  const sendQuery = async () => {
+export default function Home() {
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<SearchMatch[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const sendQuery = async (): Promise<void> => {
     if (!query.trim()) return;
     setLoading(true);
     setError(null);
@@ -25,17 +34,18 @@ export default function Home() {
         throw new Error(errorData.detail || "Failed to fetch data");
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as { matches?: SearchMatch[] };
       setResults(data.matches || []);
     } catch (error) {
-      setError(error.message);
+      const message = error instanceof Error ? error.message : "Unknown error";
+      setError(message);
       setResults([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !loading) {
       sendQuery();
     }

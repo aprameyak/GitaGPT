@@ -1,4 +1,6 @@
 import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -7,7 +9,7 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "GitaGPT - Bhagavad Gita Search",
   description: "Search and understand verses from the Bhagavad Gita using AI",
   viewport: "width=device-width, initial-scale=1",
@@ -16,7 +18,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>

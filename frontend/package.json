@@ -18,8 +18,13 @@
     "tailwindcss": "^3.4.0"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-next": "14.0.4"
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.0.4",
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=18.0.0"
