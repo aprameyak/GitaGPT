@@ -131,3 +131,10 @@ cython_debug/
 *.log
 *.pid
 *.sock
+
+# macOS
+.DS_Store
+
+# Environment files
+.env.local
+.env.*.local
