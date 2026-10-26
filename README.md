@@ -29,7 +29,7 @@ distance         ChromaDB distance (lower is closer)
 
 - Semantic search over the 701 entries in `verse.json` using a ChromaDB collection and the `all-MiniLM-L6-v2` sentence-transformer model
 - For each match: chapter and verse number, the Sanskrit text, and word meanings
-- A per-verse explanation from Google Gemini (`gemini-pro`) that relates the verse to your question. Without `GOOGLE_API_KEY` the API still returns verses, with a placeholder explanation.
+- A per-verse explanation from Google Gemini (`gemini-3.8-flash`) that relates the verse to your question. Without `GOOGLE_API_KEY` the API still returns verses, with a placeholder explanation.
 - A Next.js frontend that shows each match with a relevance percentage computed as `1 - distance`
 - Dockerfile and `render.yaml` for the backend, and `vercel.json` for the frontend
 
