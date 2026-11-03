@@ -28,5 +28,13 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.32"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^9.0.9"
+    }
   }
 }
