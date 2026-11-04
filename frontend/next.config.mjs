@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: process.env.STATIC_EXPORT ? "export" : "standalone",
   async rewrites() {
     return [
       {
@@ -27,9 +27,8 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
-  swcMinify: true,
   images: {
-    unoptimized: true,
+    unoptimized: !!process.env.STATIC_EXPORT,
     domains: ['gitagpt-iyj1.onrender.com'],
   },
 };
