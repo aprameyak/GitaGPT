@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: "export",
   async rewrites() {
     return [
       {
@@ -29,6 +29,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
+    unoptimized: true,
     domains: ['gitagpt-iyj1.onrender.com'],
   },
 };
