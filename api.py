@@ -2,18 +2,14 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sentence_transformers import SentenceTransformer
 import os
-import chromadb
-try:
-    from chromadb.utils import embedding_functions
-except ImportError:
-    from chromadb import embedding_functions
+import numpy as np
+from fastembed import TextEmbedding
 import google.generativeai as genai
 from dotenv import load_dotenv
 import json
 
-from etl import load_verses
+from etl import EMBEDDING_MODEL, EMBEDDINGS_FILE, MODEL_CACHE, normalize
 
 # Load environment variables
 load_dotenv()
@@ -37,36 +33,26 @@ if not api_key:
 if api_key:
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-3.8-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash-lite')
     except Exception as e:
         print(f"Error configuring Gemini: {e}")
         model = None
 else:
     model = None
 
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-
 # Initialize models
 try:
-    embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+    embedding_model = TextEmbedding(model_name=EMBEDDING_MODEL, cache_dir=MODEL_CACHE)
 except Exception as e:
     print(f"Error loading embedding model: {e}")
     embedding_model = None
 
-# Initialize Chroma
+# Load precomputed verse embeddings (built by etl.py)
 try:
-    client = chromadb.PersistentClient(path="./chroma_db")
-    try:
-        collection = client.get_or_create_collection(
-            name="gita_verses",
-            embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
-        )
-    except Exception:
-        # Fallback for older chromadb versions
-        collection = client.get_or_create_collection(name="gita_verses")
+    verse_embeddings = np.load(EMBEDDINGS_FILE)
 except Exception as e:
-    print(f"Error loading Chroma DB: {str(e)}")
-    collection = None
+    print(f"Error loading verse embeddings: {str(e)}")
+    verse_embeddings = None
 
 gita_data = load_verses()
 
@@ -107,24 +93,20 @@ def search_verses(request: SearchRequest):
     if not request.query:
         raise HTTPException(status_code=400, detail="Query cannot be empty")
 
-    if not collection or not gita_data:
+    if embedding_model is None or verse_embeddings is None or not gita_data:
         raise HTTPException(status_code=500, detail="Database not available")
 
     try:
-        # Search using Chroma
-        results = collection.query(
-            query_texts=[request.query],
-            n_results=request.top_k,
-            include=["documents", "metadatas", "distances"]
-        )
-        
-        if not results.get("ids") or not results["ids"][0]:
-            return {"query": request.query, "matches": []}
-        
+        # Cosine similarity against the precomputed verse embeddings
+        query_vector = normalize(list(embedding_model.embed([request.query])))[0]
+        similarities = verse_embeddings @ query_vector
+        top_k = max(1, min(request.top_k, 10))
+        top_ids = np.argsort(-similarities)[:top_k]
+
         formatted_results = []
-        for i in range(len(results["ids"][0])):
+        for i, verse_id in enumerate(top_ids):
             try:
-                verse_id = int(results["ids"][0][i].replace("verse_", ""))
+                verse_id = int(verse_id)
                 if verse_id < len(gita_data):
                     verse = gita_data[verse_id]
                     
@@ -138,7 +120,7 @@ def search_verses(request: SearchRequest):
                             "text": verse["text"],
                             "interpretation": verse["word_meanings"],
                             "ai_explanation": explanation,
-                            "distance": float(results["distances"][0][i]) if results.get("distances") else 0.0
+                            "distance": float(1 - similarities[verse_id])
                         })
             except Exception as e:
                 print(f"Error processing result {i}: {e}")

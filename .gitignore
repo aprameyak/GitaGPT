@@ -138,3 +138,5 @@ cython_debug/
 # Environment files
 .env.local
 .env.*.local
+models/
+verse_embeddings.npy

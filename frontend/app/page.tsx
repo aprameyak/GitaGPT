@@ -1,7 +1,7 @@
 "use client";
 import { useState, type KeyboardEvent } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://gitagpt-api.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://gitagpt-1.onrender.com";
 
 interface SearchMatch {
   chapter: number;

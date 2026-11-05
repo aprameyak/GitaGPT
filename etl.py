@@ -1,12 +1,13 @@
 import json
-from sentence_transformers import SentenceTransformer
-import chromadb
-from chromadb.utils import embedding_functions
+
+import numpy as np
+from fastembed import TextEmbedding
 
 VERSE_JSON = "verse.json"
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+EMBEDDINGS_FILE = "verse_embeddings.npy"
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+MODEL_CACHE = "./models"
 
-model = SentenceTransformer(EMBEDDING_MODEL)
 
 def load_verses():
     with open(VERSE_JSON, "r", encoding="utf-8") as file:
@@ -17,32 +18,23 @@ def load_verses():
             raise ValueError(f"Invalid verse data: missing required keys in {verse}")
     return verses
 
-def create_chroma_db():
+
+def normalize(vectors):
+    vectors = np.asarray(vectors, dtype=np.float32)
+    return vectors / np.linalg.norm(vectors, axis=-1, keepdims=True)
+
+
+def create_embeddings():
     print("🚀 Starting Bhagavad Gita Vectorization Job...")
-    
-    # Load verses like original
+
     gita_data = load_verses()
-    
-    # Initialize Chroma
-    client = chromadb.PersistentClient(path="./chroma_db")
-    
-    # Create collection with same embedding model
-    collection = client.get_or_create_collection(
-        name="gita_verses",
-        embedding_function=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
-    )
-    
-    # Add documents - keeping verse IDs sequential like FAISS
-    ids = [f"verse_{i}" for i in range(len(gita_data))]
-    texts = [verse["text"] for verse in gita_data]
-    
-    # Add to collection
-    collection.add(
-        ids=ids,
-        documents=texts
-    )
-    
-    print("🎉 Vectorization Completed Successfully!")
+    model = TextEmbedding(model_name=EMBEDDING_MODEL, cache_dir=MODEL_CACHE)
+    # word_meanings is the English gloss, which matches English questions far better than the Sanskrit text
+    embeddings = normalize(list(model.embed([verse["word_meanings"] for verse in gita_data])))
+    np.save(EMBEDDINGS_FILE, embeddings)
+
+    print(f"🎉 Vectorization Completed Successfully! ({len(embeddings)} verses)")
+
 
 if __name__ == "__main__":
-    create_chroma_db()
+    create_embeddings()
