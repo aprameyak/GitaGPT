@@ -2,7 +2,7 @@
 
 GitaGPT lets you ask a question in plain language and get back the closest-matching Bhagavad Gita verses, each with its word meanings and a short Gemini-written explanation tied to your question.
 
-Live site: https://gita-gpt-two.vercel.app
+Live site: https://gita-gpt.aprameyak.workers.dev
 
 ## Example
 
@@ -31,13 +31,13 @@ distance         ChromaDB distance (lower is closer)
 - For each match: chapter and verse number, the Sanskrit text, and word meanings
 - A per-verse explanation from Google Gemini (`gemini-3.8-flash`) that relates the verse to your question. Without `GOOGLE_API_KEY` the API still returns verses, with a placeholder explanation.
 - A Next.js frontend that shows each match with a relevance percentage computed as `1 - distance`
-- Dockerfile and `render.yaml` for the backend, and `vercel.json` for the frontend
+- Dockerfile and `render.yaml` for the backend, and `frontend/wrangler.jsonc` for the frontend
 
 ## Tech stack
 
 - Backend: Python, FastAPI, Uvicorn, ChromaDB, sentence-transformers, `google-generativeai`
 - Frontend: Next.js 14, React 18, Tailwind CSS
-- Deployment: Docker on Render (backend), Vercel (frontend)
+- Deployment: Docker on Render (backend), Cloudflare Workers (frontend)
 
 ## Getting started
 
