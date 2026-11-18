@@ -117,13 +117,6 @@ button:focus {
   animation: slideIn 0.4s ease-out;
 }
 
-/* Custom border gradient */
-.border-gradient {
-  border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(45deg, #fbbf24, #f59e0b) border-box;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
